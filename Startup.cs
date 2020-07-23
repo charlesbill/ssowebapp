@@ -27,6 +27,8 @@ namespace ssowebapp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddRazorPages();
+
+            // This authenticates via the Certificate store on AWS Certificate Manager
             services.AddAuthentication(
                 CertificateAuthenticationDefaults.AuthenticationScheme)
                 .AddCertificate(options =>
@@ -35,9 +37,11 @@ namespace ssowebapp
                     {
                         OnCertificateValidated = context =>
                         {
+                            
                             var validationService = context.HttpContext.RequestServices.GetService<CertificateService>();
 
                             string arn = Configuration.GetValue<string>("AppSettings:AWSArn");
+                            // This method validates the Client X509 Certificate
                             if (validationService.ValidateCertificate(context.ClientCertificate, arn))
                             {
                                 context.Success();
@@ -56,6 +60,7 @@ namespace ssowebapp
                         }
                     };
                 });
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -77,6 +82,7 @@ namespace ssowebapp
 
             app.UseRouting();
 
+            // This is added to forward the certificate
             app.UseCertificateForwarding();
             app.UseAuthentication();
 
