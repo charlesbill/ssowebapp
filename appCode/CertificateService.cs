@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -14,8 +14,18 @@ using Amazon.CertificateManager.Model.Internal.MarshallTransformations;
 
 namespace ssowebapp.appCode
 {
+    // Certificate service using Amazon Certificate Manager
     public class CertificateService
     {
+        /// <summary>
+        /// Validate the certificate on ARN. The ARN is stored in the appsettings.json. 
+        /// 
+        /// The X509Certificate2 is injected into this class.
+        /// 
+        /// </summary>
+        /// <param name="clientCertificate"></param>
+        /// <param name="arn"></param>
+        /// <returns></returns>
         public bool ValidateCertificate(X509Certificate2 clientCertificate, string arn)
         {
             AmazonCertificateManagerClient client = new AmazonCertificateManagerClient();
@@ -33,7 +43,6 @@ namespace ssowebapp.appCode
             handler.ClientCertificates.Add(cert);
             var httpClient = new HttpClient(handler);
 
-            //var cert = new X509Certificate2(Path.Combine("ccissocertificate"), "admin123");
             if (clientCertificate.Thumbprint == cert.Thumbprint)
             {
                 return true;
@@ -41,6 +50,8 @@ namespace ssowebapp.appCode
 
             return false;
         }
+
+        // This is an alternative method how to validate certificates. This should be implemented by using an Interface. 
 
         //public GetCertificateResponse GetCertificate(string certificateArn)
         //{
