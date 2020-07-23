@@ -21,11 +21,11 @@ namespace ssowebapp
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    webBuilder.UseUrls("http://*:4000");
                     webBuilder.UseStartup<Startup>();
                     webBuilder.UseKestrel(options =>
-                    {
-                        options.ConfigureHttpsDefaults(opt =>
+                   {
+                       // This will only run if a valid certificate is found
+                      options.ConfigureHttpsDefaults(opt =>
                             opt.ClientCertificateMode =
                                 ClientCertificateMode.RequireCertificate);
                     });
