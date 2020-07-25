@@ -3,7 +3,7 @@ version: '3.4'
 
 services:
   ssowebapp:
-    image: 463503197761.dkr.ecr.eu-west-1.amazonaws.com/ssowebapp:latest
+    image: ssowebapp:latest
     build:
       context: .
       dockerfile: Dockerfile
